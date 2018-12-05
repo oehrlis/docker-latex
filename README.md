@@ -1,4 +1,5 @@
 # Latex Docker Images
+
 Docker scripts to build an image to provide a minimal [texlive 2018](https://www.tug.org/texlive/) installation to support simple PDF transformations. Additional texlive packages have to be installed be extending this images. 
 
 ## Run
@@ -49,6 +50,7 @@ $ docker build -t oehrlis/latex .
 Optionally you can add additional texlive package to the `tlmgr` command in the Dockerfile.
 
 ## Issues
+
 Please file your bug reports, enhancement requests, questions and other support requests within [Github's issue tracker](https://help.github.com/articles/about-issues/):
 
 * [Existing issues](https://github.com/oehrlis/docker-latex/issues)
