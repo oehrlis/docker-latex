@@ -60,3 +60,4 @@ Please file your bug reports, enhancement requests, questions and other support 
 
 * [pandoc](https://pandoc.org)
 * [texlive 2018](https://www.tug.org/texlive/)
+* [GitHub Google Fonts](https://github.com/google/fonts)

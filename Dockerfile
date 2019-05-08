@@ -33,6 +33,8 @@ ENV WORKDIR="/workdir" \
 # copy the texlife profile
 COPY texlive.profile /tmp/texlive.profile
 
+COPY fonts/* /usr/share/fonts/custom/
+
 # RUN as user root
 # ----------------------------------------------------------------------
 # install packages used to run texlive install stuff
@@ -44,13 +46,13 @@ COPY texlive.profile /tmp/texlive.profile
 # - clean up tlmgr, yum and other stuff
 RUN echo "%_install_langs   en" >/etc/rpm/macros.lang && \
     yum -y upgrade && \
-    yum -y install wget ghostscript perl tar gzip zip unzip perl-core && \
+    yum -y install wget ghostscript perl tar gzip zip unzip perl-core xorg-x11-font-utils fontconfig && \
     mkdir /tmp/texlive && \
     curl -Lsf http://www.pirbot.com/mirrors/ctan/systems/texlive/tlnet/install-tl-unx.tar.gz \
         | tar zxvf - --strip-components 1 -C /tmp/texlive/ && \
     /tmp/texlive/install-tl --profile=/tmp/texlive.profile  && \
     tlmgr install koma-script float ly1 \
-                lm ec listings times mweights \
+                xetex lm ec listings times mweights \
                 sourcecodepro titling setspace \
                 xcolor csquotes etoolbox caption \
                 mdframed l3packages l3kernel draftwatermark \
@@ -63,6 +65,7 @@ RUN echo "%_install_langs   en" >/etc/rpm/macros.lang && \
         -o /tmp/install-getnonfreefonts && \
     texlua /tmp/install-getnonfreefonts && \
     getnonfreefonts --sys -a && \
+    fc-cache -fv && \ 
     yum clean all && \
     rm -rv /tmp/texlive /tmp/texlive.profile /tmp/install* && \
     rm -rf /var/cache/yum && \
