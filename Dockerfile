@@ -52,7 +52,7 @@ RUN echo "%_install_langs   en" >/etc/rpm/macros.lang && \
         | tar zxvf - --strip-components 1 -C /tmp/texlive/ && \
     /tmp/texlive/install-tl --profile=/tmp/texlive.profile  && \
     tlmgr install koma-script float ly1 \
-                xetex lm ec listings times mweights \
+                titlesec xetex lm ec listings times mweights \
                 sourcecodepro titling setspace \
                 xcolor csquotes etoolbox caption \
                 mdframed l3packages l3kernel draftwatermark \
