@@ -19,7 +19,7 @@
 
 # Pull base image
 # ----------------------------------------------------------------------
-FROM oraclelinux:7-slim 
+FROM alpine:3.9.4
 
 # Maintainer
 # ----------------------------------------------------------------------
@@ -29,11 +29,19 @@ LABEL maintainer="stefan.oehrli@trivadis.com"
 # -------------------------------------------------------------
 ENV WORKDIR="/workdir" \
     PATH=/usr/local/texlive/2018/bin/x86_64-linux:$PATH
-    
+
 # copy the texlife profile
 COPY texlive.profile /tmp/texlive.profile
 
-COPY fonts/* /usr/share/fonts/custom/
+# RUN as user root
+# ----------------------------------------------------------------------
+# install additional alpine packages 
+# - ugrade system
+# - install wget tar gzip perl perl-core
+RUN apk update && apk upgrade && apk add --update --no-cache \
+        wget msttcorefonts-installer xz curl ghostscript perl \
+        tar gzip zip unzip fontconfig python py-pip && \
+    rm -rf /var/cache/apk/*
 
 # RUN as user root
 # ----------------------------------------------------------------------
@@ -44,31 +52,28 @@ COPY fonts/* /usr/share/fonts/custom/
 # - initiate basic texlive installation
 # - add a couple of custom package via tlmgr
 # - clean up tlmgr, yum and other stuff
-RUN echo "%_install_langs   en" >/etc/rpm/macros.lang && \
-    yum -y upgrade && \
-    yum -y install wget ghostscript perl tar gzip zip unzip perl-core xorg-x11-font-utils fontconfig && \
-    mkdir /tmp/texlive && \
-    curl -Lsf http://www.pirbot.com/mirrors/ctan/systems/texlive/tlnet/install-tl-unx.tar.gz \
+RUN mkdir /tmp/texlive && \
+    curl -Lsf http://mirror.ctan.org/systems/texlive/tlnet/install-tl-unx.tar.gz \
         | tar zxvf - --strip-components 1 -C /tmp/texlive/ && \
-    /tmp/texlive/install-tl --profile=/tmp/texlive.profile  && \
-    tlmgr install koma-script float ly1 \
-                titlesec xetex lm ec listings times mweights \
-                sourcecodepro titling setspace \
-                xcolor csquotes etoolbox caption \
-                mdframed l3packages l3kernel draftwatermark \
-                everypage minitoc breakurl lastpage \ 
-                datetime fmtcount blindtext fourier textpos \
-                needspace sourcesanspro xkeyval pagecolor epstopdf \
-                adjustbox collectbox && \
+    /tmp/texlive/install-tl --profile /tmp/texlive.profile && \
+    tlmgr install \
+        ttfutils fontinst \
+        fvextra footnotebackref times pdftexcmds \
+        helvetic symbol grffile zapfding ly1 lm-math \
+        soul titlesec xetex ec mweights \
+        sourcecodepro titling csquotes  \
+        mdframed draftwatermark mdwtools \
+        everypage minitoc breakurl lastpage \
+        datetime fmtcount blindtext fourier textpos \
+        needspace sourcesanspro pagecolor epstopdf \
+        letltxmacro zref \
+        adjustbox collectbox ulem bidi upquote xecjk xurl && \
     tlmgr backup --clean --all && \
     curl -f http://tug.org/fonts/getnonfreefonts/install-getnonfreefonts \
         -o /tmp/install-getnonfreefonts && \
     texlua /tmp/install-getnonfreefonts && \
-    getnonfreefonts --sys -a && \
-    fc-cache -fv && \ 
-    yum clean all && \
+    getnonfreefonts --sys arial-urw && \ 
     rm -rv /tmp/texlive /tmp/texlive.profile /tmp/install* && \
-    rm -rf /var/cache/yum && \
     rm /usr/local/texlive/*/tlpkg/texlive.tlpdb.*
 
 # Define /texlive as volume
