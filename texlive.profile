@@ -1,21 +1,21 @@
-# texlive.profile written on Tue Oct  2 06:35:21 2018 UTC
+# texlive.profile written on Tue Oct  2 06:35:21 2019 UTC
 # It will NOT be updated and reflects only the
 # installation profile at installation time.
 selected_scheme scheme-custom
-TEXDIR /usr/local/texlive/2018
-TEXMFCONFIG ~/.texlive2018/texmf-config
+TEXDIR /usr/local/texlive/2019
+TEXMFCONFIG ~/.texlive2019/texmf-config
 TEXMFHOME ~/texmf
 TEXMFLOCAL /usr/local/texlive/texmf-local
-TEXMFSYSCONFIG /usr/local/texlive/2018/texmf-config
-TEXMFSYSVAR /usr/local/texlive/2018/texmf-var
-TEXMFVAR ~/.texlive2018/texmf-var
+TEXMFSYSCONFIG /usr/local/texlive/2019/texmf-config
+TEXMFSYSVAR /usr/local/texlive/2019/texmf-var
+TEXMFVAR ~/.texlive2019/texmf-var
 binary_x86_64-linux 1
 collection-basic 1
 collection-langenglish 1
 collection-langgerman 1
 collection-latex 1
 #collection-latexextra 1
-collection-fontsrecommended 1
+collection-fontsrecommended 0
 collection-latexrecommended 1
 instopt_adjustpath 0
 instopt_adjustrepo 1

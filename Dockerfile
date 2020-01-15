@@ -5,9 +5,9 @@
 # Name.......: Dockerfile
 # Author.....: Stefan Oehrli (oes) stefan.oehrli@trivadis.com
 # Editor.....: Stefan Oehrli
-# Date.......: 2018.12.05
+# Date.......: 2018.03.19
 # Revision...: 1.0
-# Purpose....: Dockerfile to build a latex / texlive image
+# Purpose....: Dockerfile to build a JSON utilities image
 # Notes......: --
 # Reference..: --
 # License....: Licensed under the Universal Permissive License v 1.0 as
@@ -28,7 +28,7 @@ LABEL maintainer="stefan.oehrli@trivadis.com"
 # Environment variables required for this build (do NOT change)
 # -------------------------------------------------------------
 ENV WORKDIR="/workdir" \
-    PATH=/usr/local/texlive/2018/bin/x86_64-linux:$PATH
+    PATH=/usr/local/texlive/2019/bin/x86_64-linuxmusl:$PATH
 
 # copy the texlife profile
 COPY texlive.profile /tmp/texlive.profile
@@ -45,13 +45,12 @@ RUN apk update && apk upgrade && apk add --update --no-cache \
 
 # RUN as user root
 # ----------------------------------------------------------------------
-# install packages used to run texlive install stuff
-# - ugrade system
-# - install wget tar gzip perl perl-core
+# install basic texlive and additonal packages
 # - download texlive installer
 # - initiate basic texlive installation
 # - add a couple of custom package via tlmgr
-# - clean up tlmgr, yum and other stuff
+# - clean up tlmgr, apk and other stuff
+# search for package tlmgr search --global --file
 RUN mkdir /tmp/texlive && \
     curl -Lsf http://mirror.ctan.org/systems/texlive/tlnet/install-tl-unx.tar.gz \
         | tar zxvf - --strip-components 1 -C /tmp/texlive/ && \
@@ -83,5 +82,5 @@ VOLUME ["${WORKDIR}"]
 WORKDIR "${WORKDIR}"
 
 # Define default command for pandoc
-CMD ["/usr/bin/bash"]
+CMD ["/bin/sh"]
 # --- EOF --------------------------------------------------------------
