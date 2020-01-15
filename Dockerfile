@@ -73,7 +73,9 @@ RUN mkdir /tmp/texlive && \
     texlua /tmp/install-getnonfreefonts && \
     getnonfreefonts --sys arial-urw && \ 
     rm -rv /tmp/texlive /tmp/texlive.profile /tmp/install* && \
-    rm /usr/local/texlive/*/tlpkg/texlive.tlpdb.*
+    rm /usr/local/texlive/*/tlpkg/texlive.tlpdb.* && \
+    update-ms-fonts && \
+    fc-cache -f 
 
 # Define /texlive as volume
 VOLUME ["${WORKDIR}"]
