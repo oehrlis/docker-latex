@@ -19,7 +19,7 @@
 
 # Pull base image
 # ----------------------------------------------------------------------
-FROM alpine:3.9.4
+FROM alpine
 
 # Maintainer
 # ----------------------------------------------------------------------
@@ -28,7 +28,7 @@ LABEL maintainer="stefan.oehrli@trivadis.com"
 # Environment variables required for this build (do NOT change)
 # -------------------------------------------------------------
 ENV WORKDIR="/workdir" \
-    PATH=/usr/local/texlive/2019/bin/x86_64-linuxmusl:$PATH
+    PATH=/usr/local/texlive/2020/bin/x86_64-linuxmusl:$PATH
 
 # copy the texlife profile
 COPY texlive.profile /tmp/texlive.profile
@@ -73,7 +73,10 @@ RUN mkdir /tmp/texlive && \
     texlua /tmp/install-getnonfreefonts && \
     getnonfreefonts --sys arial-urw && \ 
     rm -rv /tmp/texlive /tmp/texlive.profile /tmp/install* && \
-    rm /usr/local/texlive/*/tlpkg/texlive.tlpdb.* && \
+    rm -rv /usr/local/texlive/*/tlpkg/texlive.tlpdb.* && \
+    rm -rv /usr/local/texlive/2020/bin/x86_64-linux && \
+    find / -name *.exe -exec rm -rv {} \; && \
+    find / -name *.log -exec rm -rv {} \;
     update-ms-fonts && \
     fc-cache -f 
 
