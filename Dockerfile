@@ -76,7 +76,7 @@ RUN mkdir /tmp/texlive && \
     rm -rv /usr/local/texlive/*/tlpkg/texlive.tlpdb.* && \
     rm -rv /usr/local/texlive/2020/bin/x86_64-linux && \
     find / -name *.exe -exec rm -rv {} \; && \
-    find / -name *.log -exec rm -rv {} \;
+    find / -name *.log -exec rm -rv {} \; && \
     update-ms-fonts && \
     fc-cache -f 
 
